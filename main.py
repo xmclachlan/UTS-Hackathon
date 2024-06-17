@@ -27,7 +27,8 @@ def read_pdf_text(pdf_path):
 
 
 def find_matches_in_text(pattern, text):
-    compiled_pattern = re.compile(re.escape(pattern), re.IGNORECASE)
+    compiled_pattern = re.compile(
+        rf'(.{{0,30}}{re.escape(pattern)}.{{0,30}})', re.IGNORECASE)
     matches = compiled_pattern.findall(text)
     return matches
 
@@ -70,6 +71,9 @@ def main():
     # Split Manual into Chapters
 
     ch3 = extract_text(manual_pdf_path, 23, 196)
+    print(ch3)
+
+    # ch5 = extract_text(manual_pdf_path, )
 
     # Set REGEX for Chapter
 
