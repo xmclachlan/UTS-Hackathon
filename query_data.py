@@ -6,6 +6,11 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 import openai
 import os
+from dotenv import load_dotenv, dotenv_values
+
+load_dotenv()
+
+openai_api = os.getenv("OPENAI_API_KEY")
 
 
 CHROMA_PATH = "chroma"
@@ -29,8 +34,9 @@ def main():
     query_text = args.query_text
 
     # Prepare the DB.
-    embedding_function = OpenAIEmbeddings(openai_api_key='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')
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
+    embedding_function = OpenAIEmbeddings(openai_api_key=openai_api)
+    db = Chroma(persist_directory=CHROMA_PATH,
+                embedding_function=embedding_function)
 
     # Search the DB.
     results = db.similarity_search_with_relevance_scores(query_text, k=3)
@@ -38,12 +44,13 @@ def main():
         print(f"Unable to find matching results.")
         return
 
-    context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
+    context_text = "\n\n---\n\n".join(
+        [doc.page_content for doc, _score in results])
     prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     prompt = prompt_template.format(context=context_text, question=query_text)
     print(prompt)
 
-    model = ChatOpenAI(openai_api_key='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')
+    model = ChatOpenAI(openai_api_key=openai_api)
     response_text = model.predict(prompt)
 
     sources = [doc.metadata.get("source", None) for doc, _score in results]
