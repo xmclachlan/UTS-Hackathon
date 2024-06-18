@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('home.html')
 
 
 @app.route('/execute', methods=['POST'])
@@ -19,10 +19,20 @@ def execute():
     # Convert the output to HTML using the markdown library
     markdown_output = markdown.markdown(result.stdout)
 
-    # Render the HTML output
+    # Render the HTML output with applied CSS
     return render_template_string('''
-        <div>{{ output|safe }}</div>
-        <a href="/">Go back</a>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Command Output</title>
+            <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        </head>
+        <body>
+            <div class="output">{{ output|safe }}</div>
+            <a href="/" class="button">Go back</a>
+        </body>
+        </html>
     ''', output=markdown_output)
 
 
