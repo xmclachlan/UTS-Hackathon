@@ -29,7 +29,7 @@ Potential Triggers: Identify possible causes of the alarm, including:
 Temperature, pressure, or power exceeding threshold setpoints
 Engine shutdown
 Sensor failure
-Crew Member Guidance: Provide recommended actions for the crew member to take in response to the alarm, considering.
+Crew Member Guidance: Provide recommended actions for the crew member to take in response to the alarm.
 Based on this context:
 {context}
 
@@ -61,14 +61,14 @@ def main():
         [doc.page_content for doc, _score in results])
     prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     prompt = prompt_template.format(context=context_text, question=query_text)
-    print(prompt)
+    #print(prompt)
 
     model = ChatOpenAI(openai_api_key=openai_api, model_name="gpt-4o", temperature=0)
 
     response_text = model.predict(prompt)
 
     sources = [doc.metadata.get("source", None) for doc, _score in results]
-    formatted_response = f"Response: {response_text}\nSources: {sources}"
+    formatted_response = f"Response: {response_text}\n"
     print(formatted_response)
 
 
