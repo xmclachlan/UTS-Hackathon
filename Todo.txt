@@ -1,0 +1,10 @@
+Return the output to the website:
+
+If enough time, do images
+
+Catching:
+saved in a file
+read it compare it with the prompt
+if same, push 
+if not, prompt to gpt
+return the answer
