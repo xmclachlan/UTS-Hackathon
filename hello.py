@@ -29,8 +29,12 @@ def execute():
             <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
         </head>
         <body>
-            <div class="output">{{ output|safe }}</div>
-            <a href="/" class="button">Go back</a>
+            <div class="flex-container">      
+                <div class="output flex-item">{{ output|safe }}</div>
+                <div class="flex-item">
+                    <a href="/" class="button">Go back</a>
+                </div>
+            </div>
         </body>
         </html>
     ''', output=markdown_output)

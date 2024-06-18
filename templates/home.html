@@ -8,12 +8,16 @@
 
 <body>
 
-    <h2>Enter a command:</h2>
-    <form action="/execute" method="post">
-        <input type="text" name="command">
-        <input type="submit" value="Execute" class="button">
-
-    </form>
+    <div class="flex-container">
+        <h2 class="flex-item">Enter the Alarm:</h2>
+        <div class="flex-item">
+        <form action="/execute" method="post">
+            <input type="text" name="command">
+            <input type="submit" value="Execute" class="button">
+        </form>
+    </div>
+    </div>
+    
 
 </body>
 </html>

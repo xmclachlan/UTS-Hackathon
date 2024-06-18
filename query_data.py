@@ -61,14 +61,15 @@ def main():
         [doc.page_content for doc, _score in results])
     prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     prompt = prompt_template.format(context=context_text, question=query_text)
-    #print(prompt)
+    # print(prompt)
 
-    model = ChatOpenAI(openai_api_key=openai_api, model_name="gpt-4o", temperature=0)
+    model = ChatOpenAI(openai_api_key=openai_api,
+                       model_name="gpt-4o", temperature=0)
 
     response_text = model.predict(prompt)
 
     sources = [doc.metadata.get("source", None) for doc, _score in results]
-    formatted_response = f"Response: {response_text}\n"
+    formatted_response = f"{response_text}\n"
     print(formatted_response)
 
 
