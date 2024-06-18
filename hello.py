@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template, render_template_string
 import subprocess
 import markdown
 
@@ -7,20 +7,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template_string('''
-        <form action="/run_script" method="post">
-            <label for="input">Enter your input:</label>
-            <input type="text" id="input" name="input">
-            <input type="submit" value="Run Script">
-        </form>
-    ''')
+    return render_template('index.html')
 
 
-@app.route('/run_script', methods=['POST'])
-def run_script():
-    user_input = request.form['input']
+@app.route('/execute', methods=['POST'])
+def execute():
+    user_command = request.form['command']
     result = subprocess.run(
-        ['python3', 'query_data.py', user_input], capture_output=True, text=True)
+        ['python3', 'query_data.py', user_command], capture_output=True, text=True)
 
     # Convert the output to HTML using the markdown library
     markdown_output = markdown.markdown(result.stdout)
