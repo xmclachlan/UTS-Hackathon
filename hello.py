@@ -1,33 +1,26 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, render_template_string
 import subprocess
-import shlex  # Import shlex for safer command line parsing
 
 app = Flask(__name__)
 
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return render_template_string('''
+        <form action="/run_script" method="post">
+            <label for="input">Enter your input:</label>
+            <input type="text" id="input" name="input">
+            <input type="submit" value="Run Script">
+        </form>
+    ''')
 
 
-@app.route('/execute', methods=['POST'])
-def execute_command():
-    try:
-        user_input = request.form['user_input']
-
-        # Construct the command with user input appended
-        command = f"echo {shlex.quote(user_input)}"
-
-        # Execute command and capture output
-        result = subprocess.run(command, shell=True,
-                                capture_output=True, text=True)
-        output = result.stdout
-
-        return render_template('result.html', user_input=user_input, output=output)
-
-    except Exception as e:
-        error_message = f"Error executing command: {str(e)}"
-        return render_template('error.html', error_message=error_message)
+@app.route('/run_script', methods=['POST'])
+def run_script():
+    user_input = request.form['input']
+    result = subprocess.run(
+        ['python3', 'query_data.py', user_input], capture_output=True, text=True)
+    return f'<pre>{result.stdout}</pre><pre>{result.stderr}</pre>'
 
 
 if __name__ == '__main__':
